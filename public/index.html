@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/Polygon_2_0.js"></script>
+        <script src="data/roadline_1.js"></script>
+        <script src="data/symbols_2.js"></script>
+        <script src="data/roundabout_3.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[31.531760171237735,35.05630339736876],[31.551073844151745,35.11533440351228]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        function pop_Polygon_2_0(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Entity'] !== null ? autolinker.link(feature.properties['Entity'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Handle'] !== null ? autolinker.link(feature.properties['Handle'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Layer'] !== null ? autolinker.link(feature.properties['Layer'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LyrFrzn'] !== null ? autolinker.link(feature.properties['LyrFrzn'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LyrLock'] !== null ? autolinker.link(feature.properties['LyrLock'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LyrOn'] !== null ? autolinker.link(feature.properties['LyrOn'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LyrVPFrzn'] !== null ? autolinker.link(feature.properties['LyrVPFrzn'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LyrHandle'] !== null ? autolinker.link(feature.properties['LyrHandle'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Color'] !== null ? autolinker.link(feature.properties['Color'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['EntColor'] !== null ? autolinker.link(feature.properties['EntColor'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LyrColor'] !== null ? autolinker.link(feature.properties['LyrColor'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['BlkColor'] !== null ? autolinker.link(feature.properties['BlkColor'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Linetype'] !== null ? autolinker.link(feature.properties['Linetype'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['EntLinetype'] !== null ? autolinker.link(feature.properties['EntLinetype'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LyrLnType'] !== null ? autolinker.link(feature.properties['LyrLnType'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['BlkLinetype'] !== null ? autolinker.link(feature.properties['BlkLinetype'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Elevation'] !== null ? autolinker.link(feature.properties['Elevation'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Thickness'] !== null ? autolinker.link(feature.properties['Thickness'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LineWt'] !== null ? autolinker.link(feature.properties['LineWt'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['EntLineWt'] !== null ? autolinker.link(feature.properties['EntLineWt'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LyrLineWt'] !== null ? autolinker.link(feature.properties['LyrLineWt'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['BlkLineWt'] !== null ? autolinker.link(feature.properties['BlkLineWt'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['RefName'] !== null ? autolinker.link(feature.properties['RefName'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LTScale'] !== null ? autolinker.link(feature.properties['LTScale'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ExtX'] !== null ? autolinker.link(feature.properties['ExtX'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ExtY'] !== null ? autolinker.link(feature.properties['ExtY'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ExtZ'] !== null ? autolinker.link(feature.properties['ExtZ'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['DocName'] !== null ? autolinker.link(feature.properties['DocName'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['DocPath'] !== null ? autolinker.link(feature.properties['DocPath'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['DocType'] !== null ? autolinker.link(feature.properties['DocType'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['DocVer'] !== null ? autolinker.link(feature.properties['DocVer'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['DocUpdate'] !== null ? autolinker.link(feature.properties['DocUpdate'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['DocId'] !== null ? autolinker.link(feature.properties['DocId'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Length'] !== null ? autolinker.link(feature.properties['Shape_Length'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Area'] !== null ? autolinker.link(feature.properties['Shape_Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['TYPE'] !== null ? autolinker.link(feature.properties['TYPE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Polygon_2_0_0(feature) {
+            switch(String(feature.properties['TYPE'])) {
+                case 'commercial':
+                    return {
+                pane: 'pane_Polygon_2_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(98,20,17,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Cultyral':
+                    return {
+                pane: 'pane_Polygon_2_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,214,196,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'educational':
+                    return {
+                pane: 'pane_Polygon_2_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,164,134,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'governmental':
+                    return {
+                pane: 'pane_Polygon_2_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,112,80,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'public':
+                    return {
+                pane: 'pane_Polygon_2_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(234,55,42,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'religious':
+                    return {
+                pane: 'pane_Polygon_2_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(186,20,25,1.0)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_Polygon_2_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(204,214,204,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Polygon_2_0');
+        map.getPane('pane_Polygon_2_0').style.zIndex = 400;
+        map.getPane('pane_Polygon_2_0').style['mix-blend-mode'] = 'normal';
+        var layer_Polygon_2_0 = new L.geoJson(json_Polygon_2_0, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Polygon_2_0',
+            layerName: 'layer_Polygon_2_0',
+            pane: 'pane_Polygon_2_0',
+            onEachFeature: pop_Polygon_2_0,
+            style: style_Polygon_2_0_0,
+        });
+        bounds_group.addLayer(layer_Polygon_2_0);
+        map.addLayer(layer_Polygon_2_0);
+        function pop_roadline_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Length'] !== null ? autolinker.link(feature.properties['Shape_Length'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['type'] !== null ? autolinker.link(feature.properties['type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_roadline_1_0(feature) {
+            switch(String(feature.properties['type'])) {
+                case 'main':
+                    return {
+                pane: 'pane_roadline_1',
+                opacity: 1,
+                color: 'rgba(215,25,28,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'major':
+                    return {
+                pane: 'pane_roadline_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 8.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'secondary1':
+                    return {
+                pane: 'pane_roadline_1',
+                opacity: 1,
+                color: 'rgba(131,131,31,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'secondary2':
+                    return {
+                pane: 'pane_roadline_1',
+                opacity: 1,
+                color: 'rgba(42,176,46,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_roadline_1',
+                opacity: 1,
+                color: 'rgba(43,131,186,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_roadline_1');
+        map.getPane('pane_roadline_1').style.zIndex = 401;
+        map.getPane('pane_roadline_1').style['mix-blend-mode'] = 'normal';
+        var layer_roadline_1 = new L.geoJson(json_roadline_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_roadline_1',
+            layerName: 'layer_roadline_1',
+            pane: 'pane_roadline_1',
+            onEachFeature: pop_roadline_1,
+            style: style_roadline_1_0,
+        });
+        bounds_group.addLayer(layer_roadline_1);
+        map.addLayer(layer_roadline_1);
+        function pop_symbols_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">OBJECTID</th>\
+                        <td>' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">name</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_symbols_2_0(feature) {
+            switch(String(feature.properties['name'])) {
+                default:
+                    return {
+                pane: 'pane_symbols_2',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(223,203,102,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'البنك العربي':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'بلوطة ابراهيم الخليل':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'جامعة القدس المفتوحة':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/tourism=museum.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'خزان خلة المغاربة':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'ديوان ال ابو عيشة':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'سوبرماركت الجلدة':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'شركة الاخوة للزيوت المعدنية':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'شركة الاخوين مول':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/shop=convenience.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'شركة البيان متورز لتجارة السيارات':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/transport_rental_car.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'صيدلية':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'كنيسة المسكوبية':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'متجر اجهزة الكترونية scada':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'مركز الشرطة':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'مسجد دير بحة':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'مصنع الجنيدي للالبان':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/accommodation_house.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'مطعم العم صالح':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'ميدان الجلدة':
+                    return {
+                pane: 'pane_symbols_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/red-marker.svg',
+            iconSize: [26.599999999999998, 26.599999999999998]
+        }),
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_symbols_2');
+        map.getPane('pane_symbols_2').style.zIndex = 402;
+        map.getPane('pane_symbols_2').style['mix-blend-mode'] = 'normal';
+        var layer_symbols_2 = new L.geoJson(json_symbols_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_symbols_2',
+            layerName: 'layer_symbols_2',
+            pane: 'pane_symbols_2',
+            onEachFeature: pop_symbols_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_symbols_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_symbols_2);
+        map.addLayer(layer_symbols_2);
+        function pop_roundabout_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Length'] !== null ? autolinker.link(feature.properties['Shape_Length'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Area'] !== null ? autolinker.link(feature.properties['Shape_Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_roundabout_3_0() {
+            return {
+                pane: 'pane_roundabout_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(183,72,75,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_roundabout_3');
+        map.getPane('pane_roundabout_3').style.zIndex = 403;
+        map.getPane('pane_roundabout_3').style['mix-blend-mode'] = 'normal';
+        var layer_roundabout_3 = new L.geoJson(json_roundabout_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_roundabout_3',
+            layerName: 'layer_roundabout_3',
+            pane: 'pane_roundabout_3',
+            onEachFeature: pop_roundabout_3,
+            style: style_roundabout_3_0,
+        });
+        bounds_group.addLayer(layer_roundabout_3);
+        map.addLayer(layer_roundabout_3);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/roundabout_3.png" /> roundabout': layer_roundabout_3,'symbols<br /><table><tr><td style="text-align: center;"><img src="legend/symbols_2_0.png" /></td><td></td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_البنكالعربي1.png" /></td><td>البنك العربي</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_بلوطةابراهيمالخليل2.png" /></td><td>بلوطة ابراهيم الخليل</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_جامعةالقدسالمفتوحة3.png" /></td><td>جامعة القدس المفتوحة</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_خزانخلةالمغاربة4.png" /></td><td>خزان خلة المغاربة</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_ديوانالابوعيشة5.png" /></td><td>ديوان ال ابو عيشة</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_سوبرماركتالجلدة6.png" /></td><td>سوبرماركت الجلدة</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_شركةالاخوةللزيوتالمعدنية7.png" /></td><td>شركة الاخوة للزيوت المعدنية</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_شركةالاخوينمول8.png" /></td><td>شركة الاخوين مول</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_شركةالبيانمتورزلتجارةالسيارات9.png" /></td><td>شركة البيان متورز لتجارة السيارات</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_صيدلية10.png" /></td><td>صيدلية</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_كنيسةالمسكوبية11.png" /></td><td>كنيسة المسكوبية</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_متجراجهزةالكترونيةscada12.png" /></td><td>متجر اجهزة الكترونية scada</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_مركزالشرطة13.png" /></td><td>مركز الشرطة</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_مسجدديربحة14.png" /></td><td>مسجد دير بحة</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_مصنعالجنيديللالبان15.png" /></td><td>مصنع الجنيدي للالبان</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_مطعمالعمصالح16.png" /></td><td>مطعم العم صالح</td></tr><tr><td style="text-align: center;"><img src="legend/symbols_2_ميدانالجلدة17.png" /></td><td>ميدان الجلدة</td></tr></table>': layer_symbols_2,'roadline<br /><table><tr><td style="text-align: center;"><img src="legend/roadline_1_main0.png" /></td><td>main</td></tr><tr><td style="text-align: center;"><img src="legend/roadline_1_major1.png" /></td><td>major</td></tr><tr><td style="text-align: center;"><img src="legend/roadline_1_secondary12.png" /></td><td>secondary1</td></tr><tr><td style="text-align: center;"><img src="legend/roadline_1_secondary23.png" /></td><td>secondary2</td></tr><tr><td style="text-align: center;"><img src="legend/roadline_1_4.png" /></td><td></td></tr></table>': layer_roadline_1,'Polygon_2<br /><table><tr><td style="text-align: center;"><img src="legend/Polygon_2_0_commercial0.png" /></td><td>commercial</td></tr><tr><td style="text-align: center;"><img src="legend/Polygon_2_0_Cultyral1.png" /></td><td>Cultyral</td></tr><tr><td style="text-align: center;"><img src="legend/Polygon_2_0_educational2.png" /></td><td>educational</td></tr><tr><td style="text-align: center;"><img src="legend/Polygon_2_0_governmental3.png" /></td><td>governmental</td></tr><tr><td style="text-align: center;"><img src="legend/Polygon_2_0_public4.png" /></td><td>public</td></tr><tr><td style="text-align: center;"><img src="legend/Polygon_2_0_religious5.png" /></td><td>religious</td></tr><tr><td style="text-align: center;"><img src="legend/Polygon_2_0_6.png" /></td><td></td></tr></table>': layer_Polygon_2_0,}).addTo(map);
+        setBounds();
+        var i = 0;
+        layer_symbols_2.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['name'] !== null?String('<div style="color: #87323f; font-size: 8pt; font-weight: bold; font-style: italic; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_symbols_2'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        resetLabels([layer_symbols_2]);
+        map.on("zoomend", function(){
+            resetLabels([layer_symbols_2]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_symbols_2]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_symbols_2]);
+        });
+        </script>
+    </body>
+</html>
